@@ -1,4 +1,4 @@
-package com.flownexa.app.domain;
+package com.flownexa.app.entities;
 
 
 import jakarta.persistence.*;
