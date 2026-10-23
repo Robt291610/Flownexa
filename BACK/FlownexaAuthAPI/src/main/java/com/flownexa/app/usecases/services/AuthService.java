@@ -1,10 +1,13 @@
 package com.flownexa.app.usecases.services;
 
 import com.flownexa.app.entities.Users;
+import com.flownexa.app.persistance.exeptions.EmailAlreadyExistsException;
 import com.flownexa.app.persistance.exeptions.InvalidCredentialsException;
 import com.flownexa.app.persistance.repository.UsersRepository;
 import com.flownexa.app.usecases.dto.LoginRequest;
 import com.flownexa.app.usecases.dto.LoginResponse;
+import com.flownexa.app.usecases.dto.RegisterRequest;
+import com.flownexa.app.usecases.dto.RegisterResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,4 +39,21 @@ public class AuthService {
 
         return new LoginResponse(user.getId(), user.getEmail(), token);
     }
+    
+    public RegisterResponse register(RegisterRequest request) {
+        usersRepository.findByEmail(request.getEmail())
+                .ifPresent(u -> {
+                    throw new EmailAlreadyExistsException("Email is already registered");
+                });
+
+        Users user = new Users();
+        user.setEmail(request.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setActive(true);
+
+        Users saved = usersRepository.save(user);
+
+        return new RegisterResponse(saved.getId(), saved.getEmail());
+    }
+    
 }
