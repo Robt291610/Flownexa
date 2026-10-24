@@ -16,10 +16,12 @@ public class AuthService {
 
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthService(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UsersRepository usersRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -34,10 +36,9 @@ public class AuthService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        // Placeholder token — swap with real JWT generation later
-        String token = "dummy-token-" + user.getId();
+        String accessToken = jwtService.generateAccessToken(user.getId(), user.getEmail());
 
-        return new LoginResponse(user.getId(), user.getEmail(), token);
+        return new LoginResponse(user.getId(), user.getEmail(), accessToken);
     }
     
     public RegisterResponse register(RegisterRequest request) {
