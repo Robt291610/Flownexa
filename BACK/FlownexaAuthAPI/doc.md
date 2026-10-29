@@ -15,7 +15,6 @@ La propuesta comienza con un solo proyecto Spring Boot y un solo módulo
 Maven. No es necesario separar cada capa en módulos Maven desde el
 inicio.
 
-2. Estructura de carpetas propuesta
 auth-api/
 ├── pom.xml
 ├── mvnw
@@ -32,8 +31,12 @@ auth-api/
 │   │   │               ├── domain/
 │   │   │               │   ├── model/
 │   │   │               │   │   ├── User.java
-│   │   │               │   │   └── Role.java
+│   │   │               │   │   ├── Role.java
+│   │   │               │   │   └── PasswordResetToken.java
 │   │   │               │   ├── exception/
+│   │   │               │   │   ├── InvalidCredentialsException.java
+│   │   │               │   │   ├── EmailAlreadyExistsException.java
+│   │   │               │   │   └── InvalidResetTokenException.java
 │   │   │               │   └── service/
 │   │   │               │
 │   │   │               ├── application/
@@ -47,7 +50,9 @@ auth-api/
 │   │   │               │   │       ├── SaveUserPort.java
 │   │   │               │   │       ├── PasswordHasher.java
 │   │   │               │   │       ├── TokenIssuer.java
-│   │   │               │   │       └── EmailSender.java
+│   │   │               │   │       ├── EmailSender.java
+│   │   │               │   │       ├── LoadPasswordResetTokenPort.java
+│   │   │               │   │       └── SavePasswordResetTokenPort.java
 │   │   │               │   └── service/
 │   │   │               │       ├── RegisterUserService.java
 │   │   │               │       ├── LoginService.java
@@ -60,25 +65,41 @@ auth-api/
 │   │   │               │   │       ├── dto/
 │   │   │               │   │       │   ├── LoginRequest.java
 │   │   │               │   │       │   ├── RegisterRequest.java
-│   │   │               │   │       │   └── AuthResponse.java
-│   │   │               │   │       └── mapper/
+│   │   │               │   │       │   ├── RegisterResponse.java
+│   │   │               │   │       │   ├── AuthResponse.java
+│   │   │               │   │       │   ├── ForgotPasswordRequest.java
+│   │   │               │   │       │   └── ResetPasswordRequest.java
+│   │   │               │   │       ├── mapper/
+│   │   │               │   │       │   └── AuthWebMapper.java
+│   │   │               │   │       └── exception/
+│   │   │               │   │           └── GlobalExceptionHandler.java
 │   │   │               │   │
 │   │   │               │   └── out/
 │   │   │               │       ├── persistence/
 │   │   │               │       │   ├── entity/
-│   │   │               │       │   │   └── UserEntity.java
+│   │   │               │       │   │   ├── UserEntity.java
+│   │   │               │       │   │   └── PasswordResetTokenEntity.java
 │   │   │               │       │   ├── SpringDataUserRepository.java
+│   │   │               │       │   ├── SpringDataPasswordResetTokenRepository.java
 │   │   │               │       │   ├── UserPersistenceAdapter.java
+│   │   │               │       │   ├── PasswordResetTokenPersistenceAdapter.java
 │   │   │               │       │   └── mapper/
+│   │   │               │       │       ├── UserMapper.java
+│   │   │               │       │       └── PasswordResetTokenMapper.java
 │   │   │               │       ├── security/
 │   │   │               │       │   ├── SpringPasswordHasher.java
 │   │   │               │       │   └── JwtTokenIssuer.java
 │   │   │               │       └── email/
-│   │   │               │           └── SmtpEmailSender.java
+│   │   │               │           ├── SmtpEmailSender.java
+│   │   │               │           └── LoggingEmailSender.java
+│   │   │               │
+│   │   │               ├── scheduler/
+│   │   │               │   └── PasswordResetTokenCleanupJob.java
 │   │   │               │
 │   │   │               └── config/
 │   │   │                   ├── SecurityConfig.java
-│   │   │                   └── JwtConfig.java
+│   │   │                   ├── JwtConfig.java
+│   │   │                   └── OpenApiConfig.java
 │   │   │
 │   │   └── resources/
 │   │       ├── application.yml
