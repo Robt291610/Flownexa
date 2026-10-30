@@ -7,6 +7,7 @@ import com.flownexa.app.adapter.in.web.dto.RegisterRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterResponse;
 import com.flownexa.app.adapter.in.web.dto.ResetPasswordRequest;
 import com.flownexa.app.application.service.AuthService;
+import com.flownexa.app.application.service.CookieService;
 import com.flownexa.app.application.service.PasswordResetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,11 +27,14 @@ public class AuthController {
 
     private final AuthService authService;
     private final PasswordResetService passwordResetService;
+    private final CookieService cookieService;
 
     public AuthController(AuthService authService,
-            PasswordResetService passwordResetService) {
+            PasswordResetService passwordResetService,
+            CookieService cookieService) {
         this.authService = authService;
         this.passwordResetService = passwordResetService;
+        this.cookieService = cookieService;
     }
 
     @PostMapping("/login")
@@ -41,7 +45,6 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Invalid credentials or inactive account"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
-    
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);

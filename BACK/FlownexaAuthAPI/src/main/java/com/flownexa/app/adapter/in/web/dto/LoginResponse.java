@@ -13,13 +13,9 @@ public class LoginResponse {
     @Schema(description = "User email")
     private String email;
 
-    @Schema(description = "JWT access token")
-    private String accessToken;
-
-    public LoginResponse(UUID userId, String email, String accessToken) {
+    public LoginResponse(UUID userId, String email) {
         this.userId = userId;
         this.email = email;
-        this.accessToken = accessToken;
     }
 
     public UUID getUserId() {
@@ -28,9 +24,5 @@ public class LoginResponse {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
     }
 }
