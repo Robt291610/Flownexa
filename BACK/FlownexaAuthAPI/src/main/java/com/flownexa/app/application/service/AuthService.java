@@ -5,9 +5,9 @@ import com.flownexa.app.domain.exception.EmailAlreadyExistsException;
 import com.flownexa.app.domain.exception.InvalidCredentialsException;
 import com.flownexa.app.adapter.out.persistance.UsersRepository;
 import com.flownexa.app.adapter.in.web.dto.LoginRequest;
-import com.flownexa.app.adapter.in.web.dto.LoginResponse;
 import com.flownexa.app.adapter.in.web.dto.RegisterRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterResponse;
+import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,23 +23,8 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
-
-    public LoginResponse login(LoginRequest request) {
-        Users user = usersRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
-
-        if (!user.isActive()) {
-            throw new InvalidCredentialsException("Account is inactive");
-        }
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new InvalidCredentialsException("Invalid email or password");
-        }
-
-        String accessToken = jwtService.generateAccessToken(user.getId(), user.getEmail());
-
-        return new LoginResponse(user.getId(), user.getEmail(), accessToken);
-    }
+    
+    public record AuthResult(UUID userId, String email, String token) {}
     
     public RegisterResponse register(RegisterRequest request) {
         usersRepository.findByEmail(request.getEmail())
@@ -56,5 +41,26 @@ public class AuthService {
 
         return new RegisterResponse(saved.getId(), saved.getEmail());
     }
+    
+    public Users findById(UUID id) {
+    return usersRepository.findById(id)
+            .orElseThrow(() -> new InvalidCredentialsException("User not found"));
+    }
+    
+    public AuthResult loginAndIssueToken(LoginRequest request) {
+    Users user = usersRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+
+    if (!user.isActive()) {
+        throw new InvalidCredentialsException("Account is inactive");
+    }
+
+    if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+        throw new InvalidCredentialsException("Invalid email or password");
+    }
+
+    String token = jwtService.generateAccessToken(user.getId(), user.getEmail());
+    return new AuthResult(user.getId(), user.getEmail(), token);
+}
     
 }
