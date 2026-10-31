@@ -1,5 +1,10 @@
 import { createBrowserRouter , Navigate} from 'react-router-dom';
 import { LoginPage } from '../features/auth/pages/LoginPage';
+import { ProtectedRoute } from '../components/common/ProtectedRoute';
+
+function DashboardPlaceholder() {
+  return <div>Dashboard (protected)</div>;
+}
 
 export const router = createBrowserRouter([
   {
@@ -10,5 +15,12 @@ export const router = createBrowserRouter([
     path: '/login',
     element: <LoginPage />,
   },
-  // ...other routes
+  {
+    path: '/dashboard',
+    element: (
+      <ProtectedRoute>
+        <DashboardPlaceholder />
+      </ProtectedRoute>
+    ),
+  },
 ]);

@@ -6,7 +6,6 @@ export interface LoginRequest {
 export interface LoginResponse {
   userId: string;
   email: string;
-  accessToken: string;
 }
 
 export interface ApiErrorResponse {
@@ -15,4 +14,9 @@ export interface ApiErrorResponse {
   error: string;
   message?: string;
   path?: string;
+}
+
+export interface MeResponse {
+  userId: string;
+  email: string;
 }
