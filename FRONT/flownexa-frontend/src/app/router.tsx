@@ -1,6 +1,7 @@
 import { createBrowserRouter , Navigate} from 'react-router-dom';
 import { LoginPage } from '../features/auth/pages/LoginPage';
 import { ProtectedRoute } from '../components/common/ProtectedRoute';
+import { DashboardLayout } from '../layouts/DashboardLayout';
 
 function DashboardPlaceholder() {
   return <div>Dashboard (protected)</div>;
@@ -19,7 +20,9 @@ export const router = createBrowserRouter([
     path: '/dashboard',
     element: (
       <ProtectedRoute>
-        <DashboardPlaceholder />
+        <DashboardLayout>
+          <DashboardPlaceholder />
+        </DashboardLayout>
       </ProtectedRoute>
     ),
   },
