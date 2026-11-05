@@ -1,5 +1,6 @@
 package com.flownexa.app.adapter.in.web.exception;
 
+import com.flownexa.app.domain.exception.CompanyAlreadyExistsException;
 import com.flownexa.app.domain.exception.EmailAlreadyExistsException;
 import com.flownexa.app.domain.exception.InvalidCredentialsException;
 import com.flownexa.app.domain.exception.InvalidResetTokenException;
@@ -45,5 +46,16 @@ public class GlobalExceptionHandler {
                 "message", ex.getMessage()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+    
+    @ExceptionHandler(CompanyAlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> handleCompanyExists(CompanyAlreadyExistsException ex) {
+    Map<String, Object> body = Map.of(
+            "timestamp", Instant.now().toString(),
+            "status", HttpStatus.CONFLICT.value(),
+            "error", "Conflict",
+            "message", ex.getMessage()
+    );
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 }

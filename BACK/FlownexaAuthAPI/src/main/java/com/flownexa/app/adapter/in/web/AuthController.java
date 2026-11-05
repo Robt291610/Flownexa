@@ -4,12 +4,16 @@ import com.flownexa.app.adapter.in.web.dto.ForgotPasswordRequest;
 import com.flownexa.app.adapter.in.web.dto.LoginRequest;
 import com.flownexa.app.adapter.in.web.dto.LoginResponse;
 import com.flownexa.app.adapter.in.web.dto.MeResponse;
+import com.flownexa.app.adapter.in.web.dto.RegisterCompanyRequest;
+import com.flownexa.app.adapter.in.web.dto.RegisterCompanyResponse;
 import com.flownexa.app.adapter.in.web.dto.RegisterRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterResponse;
 import com.flownexa.app.adapter.in.web.dto.ResetPasswordRequest;
 import com.flownexa.app.application.service.AuthService;
+import com.flownexa.app.application.service.CompanyRegistrationService;
 import com.flownexa.app.application.service.CookieService;
 import com.flownexa.app.application.service.PasswordResetService;
+import com.flownexa.app.application.service.records.AuthResult;
 import com.flownexa.app.domain.model.Users;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,13 +37,16 @@ public class AuthController {
     private final AuthService authService;
     private final PasswordResetService passwordResetService;
     private final CookieService cookieService;
+    private final CompanyRegistrationService companyRegistrationService;
 
     public AuthController(AuthService authService,
             PasswordResetService passwordResetService,
-            CookieService cookieService) {
+            CookieService cookieService,
+            CompanyRegistrationService companyRegistrationService) {
         this.authService = authService;
         this.passwordResetService = passwordResetService;
         this.cookieService = cookieService;
+        this.companyRegistrationService = companyRegistrationService;
     }
 
     @PostMapping("/login")
@@ -52,21 +59,16 @@ public class AuthController {
     })
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request,
                                                 HttpServletResponse response) {
-        AuthService.AuthResult result = authService.loginAndIssueToken(request);
+        AuthResult result = authService.loginAndIssueToken(request);
         cookieService.addTokenCookie(response, result.token());
         return ResponseEntity.ok(new LoginResponse(result.userId(), result.email()));
     }
     
-    @PostMapping("/register")
-    @Operation(summary = "Register new user", description = "Creates a new user account with email and password")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User registered successfully",
-                    content = @Content(schema = @Schema(implementation = RegisterResponse.class))),
-            @ApiResponse(responseCode = "409", description = "Email already registered"),
-            @ApiResponse(responseCode = "400", description = "Validation error")
-    })
-    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
-        RegisterResponse response = authService.register(request);
+    @PostMapping("/register-company")
+    @Operation(summary = "Register a new company",
+            description = "Creates a new organization and its first admin user")
+    public ResponseEntity<RegisterCompanyResponse> registerCompany(@Valid @RequestBody RegisterCompanyRequest request) {
+        RegisterCompanyResponse response = companyRegistrationService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     

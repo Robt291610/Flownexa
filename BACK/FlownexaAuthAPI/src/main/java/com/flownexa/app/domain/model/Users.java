@@ -1,6 +1,7 @@
 package com.flownexa.app.domain.model;
 
 
+import com.flownexa.app.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,4 +28,13 @@ public class Users {
 
     @Column(nullable = false)
     private boolean active;
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "organization_id", nullable = false)
+    private Organization organization;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Role role;
+    
 }

@@ -7,6 +7,7 @@ import com.flownexa.app.adapter.out.persistance.UsersRepository;
 import com.flownexa.app.adapter.in.web.dto.LoginRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterResponse;
+import com.flownexa.app.application.service.records.AuthResult;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,6 @@ public class AuthService {
         this.jwtService = jwtService;
     }
     
-    public record AuthResult(UUID userId, String email, String token) {}
     
     public RegisterResponse register(RegisterRequest request) {
         usersRepository.findByEmail(request.getEmail())
@@ -60,6 +60,6 @@ public class AuthService {
     }
 
     String token = jwtService.generateAccessToken(user.getId(), user.getEmail());
-    return new AuthResult(user.getId(), user.getEmail(), token);
+    return new AuthResult(user.getId(), user.getEmail(), user.getOrganization().getId(), user.getRole(), token);
     }
 }
