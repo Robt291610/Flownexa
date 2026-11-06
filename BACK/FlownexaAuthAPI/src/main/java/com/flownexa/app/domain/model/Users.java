@@ -33,7 +33,7 @@ public class Users {
     private Organization organization;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private Role role;
     
     @Enumerated(EnumType.STRING)
