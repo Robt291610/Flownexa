@@ -3,7 +3,10 @@ package com.flownexa.app.adapter.in.web.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
+@Getter
+@Setter
 @Schema(description = "Request to set a new password using a reset token")
 public class ResetPasswordRequest {
 
@@ -15,10 +18,4 @@ public class ResetPasswordRequest {
     @Size(min = 8, message = "Password must be at least 8 characters")
     @Schema(example = "NewSecurePass123!")
     private String newPassword;
-
-    public String getToken() { return token; }
-    public void setToken(String token) { this.token = token; }
-
-    public String getNewPassword() { return newPassword; }
-    public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
 }

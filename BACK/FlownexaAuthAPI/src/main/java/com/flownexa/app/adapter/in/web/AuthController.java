@@ -6,8 +6,6 @@ import com.flownexa.app.adapter.in.web.dto.LoginResponse;
 import com.flownexa.app.adapter.in.web.dto.MeResponse;
 import com.flownexa.app.adapter.in.web.dto.RegisterCompanyRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterCompanyResponse;
-import com.flownexa.app.adapter.in.web.dto.RegisterRequest;
-import com.flownexa.app.adapter.in.web.dto.RegisterResponse;
 import com.flownexa.app.adapter.in.web.dto.ResetPasswordRequest;
 import com.flownexa.app.application.service.AuthService;
 import com.flownexa.app.application.service.CompanyRegistrationService;

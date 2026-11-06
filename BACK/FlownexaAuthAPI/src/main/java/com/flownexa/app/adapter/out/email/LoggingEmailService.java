@@ -19,4 +19,12 @@ public class LoggingEmailService implements EmailService {
         log.info("Link: {}", resetLink);
         log.info("==========================================");
     }
+    
+    @Override
+    public void sendJoinRequestNotification(String adminEmail, String requesterEmail, String companyName) {
+        log.info("=== JOIN REQUEST NOTIFICATION (local mode) ===");
+        log.info("To admin: {}", adminEmail);
+        log.info("Requester: {} wants to join {}", requesterEmail, companyName);
+        log.info("================================================");
+    }
 }

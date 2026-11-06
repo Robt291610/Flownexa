@@ -33,4 +33,17 @@ public class SmtpEmailService implements EmailService {
                 """.formatted(resetLink));
         mailSender.send(message);
     }
+    
+    @Override
+    public void sendJoinRequestNotification(String adminEmail, String requesterEmail, String companyName) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(adminEmail);
+        message.setSubject("New request to join " + companyName);
+        message.setText("""
+                %s has requested to join %s.
+
+                Review and approve or reject this request in the admin panel.
+                """.formatted(requesterEmail, companyName));
+        mailSender.send(message);
+    }
 }

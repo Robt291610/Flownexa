@@ -3,7 +3,11 @@ package com.flownexa.app.adapter.in.web.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
+@NoArgsConstructor
+@Getter
+@Setter
 @Schema(description = "Login request payload")
 public class LoginRequest {
 
@@ -15,23 +19,4 @@ public class LoginRequest {
     @NotBlank(message = "Password is required")
     @Schema(description = "User password", example = "0123456789")
     private String password;
-
-    public LoginRequest() {
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

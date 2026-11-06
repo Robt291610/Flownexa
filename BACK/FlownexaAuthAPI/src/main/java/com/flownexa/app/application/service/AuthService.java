@@ -8,6 +8,7 @@ import com.flownexa.app.adapter.in.web.dto.LoginRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterResponse;
 import com.flownexa.app.application.service.records.AuthResult;
+import com.flownexa.app.domain.enums.UserStatus;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class AuthService {
         Users user = new Users();
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setActive(true);
+//        user.setActive(true);
 
         Users saved = usersRepository.save(user);
 
@@ -51,8 +52,8 @@ public class AuthService {
     Users user = usersRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
 
-    if (!user.isActive()) {
-        throw new InvalidCredentialsException("Account is inactive");
+    if (user.getStatus() != UserStatus.ACTIVE) {
+        throw new InvalidCredentialsException("Account is not active");
     }
 
     if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {

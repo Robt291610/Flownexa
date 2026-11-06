@@ -4,6 +4,7 @@ import com.flownexa.app.domain.exception.CompanyAlreadyExistsException;
 import com.flownexa.app.domain.exception.EmailAlreadyExistsException;
 import com.flownexa.app.domain.exception.InvalidCredentialsException;
 import com.flownexa.app.domain.exception.InvalidResetTokenException;
+import com.flownexa.app.domain.exception.UnauthorizedActionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -57,5 +58,16 @@ public class GlobalExceptionHandler {
             "message", ex.getMessage()
     );
     return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+    
+    @ExceptionHandler(UnauthorizedActionException.class)
+    public ResponseEntity<Map<String, Object>> handleUnauthorized(UnauthorizedActionException ex) {
+        Map<String, Object> body = Map.of(
+                "timestamp", Instant.now().toString(),
+                "status", HttpStatus.FORBIDDEN.value(),
+                "error", "Forbidden",
+                "message", ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
     }
 }

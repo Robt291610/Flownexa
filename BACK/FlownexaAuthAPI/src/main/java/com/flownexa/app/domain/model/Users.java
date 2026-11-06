@@ -2,7 +2,9 @@ package com.flownexa.app.domain.model;
 
 
 import com.flownexa.app.domain.enums.Role;
+import com.flownexa.app.domain.enums.UserStatus;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 
 import java.util.UUID;
@@ -25,9 +27,6 @@ public class Users {
 
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
-
-    @Column(nullable = false)
-    private boolean active;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "organization_id", nullable = false)
@@ -36,5 +35,24 @@ public class Users {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Role role;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserStatus status;
+    
+    @Column(name = "requested_at", nullable = false, updatable = false)
+    private LocalDateTime requestedAt;
+    
+    @Column(name = "decided_at")
+    private LocalDateTime decidedAt;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "decided_by_user_id")
+    private Users decidedBy;
+    
+    @PrePersist
+    protected void onCreate() {
+        this.requestedAt = LocalDateTime.now();
+    }
     
 }
