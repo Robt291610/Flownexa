@@ -21,6 +21,24 @@ public class Organization {
 
     @Column(nullable = false, unique = true, length = 150)
     private String name;
+    
+    @Column(name = "legal_name", nullable = false, length = 200)
+    private String legalName;
+
+    @Column(name = "tax_id", nullable = false, unique = true, length = 50)
+    private String taxId;
+
+    @Column(length = 100)
+    private String industry;
+
+    @Column(nullable = false, length = 100)
+    private String country;
+
+    @Column(length = 30)
+    private String phone;
+
+    @Column(name = "contact_email", length = 255)
+    private String contactEmail;
 
     @Column(nullable = false)
     private boolean active = true;
@@ -38,8 +56,27 @@ public class Organization {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    public String getLegalName() { return legalName; }
+    public void setLegalName(String legalName) { this.legalName = legalName; }
+
+    public String getTaxId() { return taxId; }
+    public void setTaxId(String taxId) { this.taxId = taxId; }
+
+    public String getIndustry() { return industry; }
+    public void setIndustry(String industry) { this.industry = industry; }
+
+    public String getCountry() { return country; }
+    public void setCountry(String country) { this.country = country; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getContactEmail() { return contactEmail; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+
 }

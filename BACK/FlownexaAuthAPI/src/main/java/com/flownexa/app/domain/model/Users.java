@@ -50,6 +50,15 @@ public class Users {
     @JoinColumn(name = "decided_by_user_id")
     private Users decidedBy;
     
+    @Column(name = "full_name", nullable = false, length = 150)
+    private String fullName;
+
+    @Column(length = 30)
+    private String phone;
+
+    @Column(name = "job_title", length = 100)
+    private String jobTitle;
+    
     @PrePersist
     protected void onCreate() {
         this.requestedAt = LocalDateTime.now();
