@@ -1,10 +1,11 @@
 package com.flownexa.app.adapter.in.web;
 
+import com.flownexa.app.adapter.in.web.dto.CreateCompanyRequest;
 import com.flownexa.app.adapter.in.web.dto.ForgotPasswordRequest;
+import com.flownexa.app.adapter.in.web.dto.JoinCompanyRequest;
 import com.flownexa.app.adapter.in.web.dto.LoginRequest;
 import com.flownexa.app.adapter.in.web.dto.LoginResponse;
 import com.flownexa.app.adapter.in.web.dto.MeResponse;
-import com.flownexa.app.adapter.in.web.dto.RegisterCompanyRequest;
 import com.flownexa.app.adapter.in.web.dto.RegisterCompanyResponse;
 import com.flownexa.app.adapter.in.web.dto.ResetPasswordRequest;
 import com.flownexa.app.application.service.AuthService;
@@ -63,11 +64,19 @@ public class AuthController {
     }
     
     @PostMapping("/register-company")
-    @Operation(summary = "Register a new company",
-            description = "Creates a new organization and its first admin user")
-    public ResponseEntity<RegisterCompanyResponse> registerCompany(@Valid @RequestBody RegisterCompanyRequest request) {
-        RegisterCompanyResponse response = companyRegistrationService.register(request);
+    @Operation(summary = "Create a new company",
+            description = "Creates a new organization and its first admin user. Fails if the company already exists.")
+    public ResponseEntity<RegisterCompanyResponse> createCompany(@Valid @RequestBody CreateCompanyRequest request) {
+        RegisterCompanyResponse response = companyRegistrationService.createCompany(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    
+    @PostMapping("/join-company")
+    @Operation(summary = "Request to join an existing company",
+            description = "Creates a pending user request. Requires approval from an admin of that company.")
+    public ResponseEntity<RegisterCompanyResponse> joinCompany(@Valid @RequestBody JoinCompanyRequest request) {
+        RegisterCompanyResponse response = companyRegistrationService.joinCompany(request);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
     
     @PostMapping("/forgot-password")
