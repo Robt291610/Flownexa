@@ -1,10 +1,8 @@
 import { Box, Grid, Typography, Stack } from '@mui/material';
-import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
 import { LoginForm } from '../components/LoginForm';
 import { useLogin } from '../hooks/useLogin';
 import loginIllustration from '../../../assets/illustrations/login-illustration.png';
 import { Logo } from '../components/common/Logo';
-
 
 export function LoginPage() {
   const { login, loading, error } = useLogin();
@@ -13,7 +11,7 @@ export function LoginPage() {
     login({ email, password });
   };
 
-    return (
+  return (
     <Grid container sx={{ minHeight: '100vh' }}>
       {/* Left branding panel */}
       <Grid
@@ -30,12 +28,13 @@ export function LoginPage() {
           overflow: 'hidden',
         }}
       >
-        <Stack direction="row" spacing={1.2} alignItems="center">
-          <Logo fontSize="large" />
-          <Typography variant="h5" fontWeight={700}>
-            Flownexa
-          </Typography>
-        </Stack>
+        <Stack spacing={3} sx={{ maxWidth: 440, zIndex: 1 }}>
+          <Stack direction="row" spacing={1.2} alignItems="center">
+            <Logo fontSize="large" />
+            <Typography variant="h5" fontWeight={700}>
+              Flownexa
+            </Typography>
+          </Stack>
 
           <Typography variant="h4" fontWeight={700} sx={{ lineHeight: 1.3 }}>
             Approvals, workflows, and audits — all in one place.
