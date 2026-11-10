@@ -20,7 +20,7 @@ export function useLogin() {
       });
       navigate('/dashboard');
     } catch (err: any) {
-      const apiError: ApiErrorResponse | undefined = err?.response?.data;
+      const apiError: ApiErrorResponse | undefined = err?.body;
       setError(apiError?.message ?? 'Invalid email or password');
     } finally {
       setLoading(false);
