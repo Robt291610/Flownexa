@@ -31,12 +31,12 @@ export function LoginPage() {
         <Stack spacing={3} sx={{ maxWidth: 440, zIndex: 1 }}>
           <Stack direction="row" spacing={1.2} alignItems="center">
             <Logo fontSize="large" />
-            <Typography variant="h5" fontWeight={700}>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Flownexa
             </Typography>
           </Stack>
 
-          <Typography variant="h4" fontWeight={700} sx={{ lineHeight: 1.3 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.3 }}>
             Approvals, workflows, and audits — all in one place.
           </Typography>
 
@@ -67,7 +67,7 @@ export function LoginPage() {
         }}
       >
         <Box sx={{ width: '100%', maxWidth: 400 }}>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
+          <Typography variant="h5" sx={{ fontWeight: 700 }} gutterBottom>
             Welcome back
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>

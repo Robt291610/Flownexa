@@ -16,7 +16,6 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link as RouterLink } from 'react-router-dom';
 
-
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => void;
   loading: boolean;
@@ -33,7 +32,7 @@ export function LoginForm({ onSubmit, loading, error }: LoginFormProps) {
     onSubmit(email, password);
   };
 
-return (
+  return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
       {error && (
         <Alert severity="error" sx={{ mb: 2.5, borderRadius: 2 }}>
@@ -52,12 +51,14 @@ return (
         autoComplete="email"
         margin="normal"
         placeholder="you@company.com"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <EmailOutlinedIcon fontSize="small" color="action" />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <EmailOutlinedIcon fontSize="small" color="action" />
+              </InputAdornment>
+            ),
+          },
         }}
       />
 
@@ -71,24 +72,26 @@ return (
         required
         autoComplete="current-password"
         margin="normal"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockOutlinedIcon fontSize="small" color="action" />
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={() => setShowPassword((prev) => !prev)}
-                edge="end"
-                size="small"
-              >
-                {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-              </IconButton>
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <LockOutlinedIcon fontSize="small" color="action" />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  edge="end"
+                  size="small"
+                >
+                  {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
         }}
       />
 
@@ -120,7 +123,7 @@ return (
         <Box component="span" sx={{ color: 'text.secondary', fontSize: '0.9rem' }}>
           Don&apos;t have an account?{' '}
         </Box>
-        <MuiLink component={RouterLink} to="/register" variant="body2" underline="hover" fontWeight={600}>
+        <MuiLink component={RouterLink} to="/register" variant="body2" underline="hover" sx={{ fontWeight: 600 }}>
           Create one
         </MuiLink>
       </Box>
