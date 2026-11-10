@@ -1,10 +1,18 @@
 // features/auth/pages/ForgotPasswordPage.tsx
-import { Box, Typography } from '@mui/material';
+import { AuthLayout } from '../../../layouts/AuthLayout';
+import { ForgotPasswordForm } from '../components/ForgotPasswordForm';
+import { useForgotPassword } from '../hooks/useForgotPassword';
+
 
 export function ForgotPasswordPage() {
+  const { requestReset, loading, error, submitted } = useForgotPassword();
+
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Typography variant="h6">Forgot password page — coming soon</Typography>
-    </Box>
+    <AuthLayout
+      title="Forgot your password?"
+      subtitle="Enter your work email and we'll send you a link to reset it."
+    >
+      <ForgotPasswordForm onSubmit={requestReset} loading={loading} error={error} submitted={submitted} />
+    </AuthLayout>
   );
 }
