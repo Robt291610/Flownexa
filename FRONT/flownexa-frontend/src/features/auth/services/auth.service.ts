@@ -1,4 +1,13 @@
-import type { LoginRequest, LoginResponse, ResetPasswordRequest, ForgotPasswordRequest, MeResponse } from '../types/auth.types';
+import type { 
+  LoginRequest, 
+  LoginResponse, 
+  ResetPasswordRequest,
+  ForgotPasswordRequest, 
+  MeResponse,
+  JoinCompanyRequest,
+  RegisterCompanyResponse,
+  CreateCompanyRequest 
+} from '../types/auth.types';
 import { apiClient } from './client';
 
 export const authService = {
@@ -17,5 +26,11 @@ export const authService = {
   },
   resetPassword(payload: ResetPasswordRequest): Promise<void> {
     return apiClient.post<void>('/api/auth/reset-password', payload);
+  },
+  createCompany(payload: CreateCompanyRequest): Promise<RegisterCompanyResponse> {
+    return apiClient.post<RegisterCompanyResponse>('/api/auth/register-company', payload);
+  },
+  joinCompany(payload: JoinCompanyRequest): Promise<RegisterCompanyResponse> {
+    return apiClient.post<RegisterCompanyResponse>('/api/auth/join-company', payload);
   },
 };

@@ -4,11 +4,16 @@ import { LoginForm } from '../components/LoginForm';
 import { useLogin } from '../hooks/useLogin';
 import loginIllustration from '../../../assets/illustrations/login-illustration.png';
 import logo from '../../../assets/logo/flownexa-logo.png';
+import { useLocation } from 'react-router-dom';
+import { Alert } from '@mui/material';
 
 export function LoginPage() {
   const { login, loading, error } = useLogin();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const location = useLocation();
+  const successMessage = (location.state as { message?: string } | null)?.message;
+
 
   const handleSubmit = (email: string, password: string) => {
     login({ email, password });
@@ -122,6 +127,12 @@ export function LoginPage() {
                 Flownexa
               </Typography>
             </Stack>
+          )}
+
+            {successMessage && (
+            <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }}>
+              {successMessage}
+            </Alert>
           )}
 
           <Typography
