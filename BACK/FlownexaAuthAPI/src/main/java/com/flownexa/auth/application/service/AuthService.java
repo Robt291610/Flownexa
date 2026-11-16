@@ -1,0 +1,67 @@
+package com.flownexa.auth.application.service;
+
+import com.flownexa.auth.domain.model.Users;
+import com.flownexa.auth.domain.exception.EmailAlreadyExistsException;
+import com.flownexa.auth.domain.exception.InvalidCredentialsException;
+import com.flownexa.auth.adapter.out.persistance.UsersRepository;
+import com.flownexa.auth.adapter.in.web.dto.LoginRequest;
+import com.flownexa.auth.adapter.in.web.dto.RegisterRequest;
+import com.flownexa.auth.adapter.in.web.dto.RegisterResponse;
+import com.flownexa.auth.application.service.records.AuthResult;
+import com.flownexa.auth.domain.enums.UserStatus;
+import java.util.UUID;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthService {
+
+    private final UsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+
+    public AuthService(UsersRepository usersRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+        this.usersRepository = usersRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+    }
+    
+    
+    public RegisterResponse register(RegisterRequest request) {
+        usersRepository.findByEmail(request.getEmail())
+                .ifPresent(u -> {
+                    throw new EmailAlreadyExistsException("Email is already registered");
+                });
+
+        Users user = new Users();
+        user.setEmail(request.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+//        user.setActive(true);
+
+        Users saved = usersRepository.save(user);
+
+        return new RegisterResponse(saved.getId(), saved.getEmail());
+    }
+    
+    public Users findById(UUID id) {
+    return usersRepository.findById(id)
+            .orElseThrow(() -> new InvalidCredentialsException("User not found"));
+    }
+    
+    public AuthResult loginAndIssueToken(LoginRequest request) {
+    Users user = usersRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+
+    if (user.getStatus() != UserStatus.ACTIVE) {
+        throw new InvalidCredentialsException("Account is not active");
+    }
+
+    if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+        throw new InvalidCredentialsException("Invalid email or password");
+    }
+
+    String token = jwtService.generateAccessToken(
+            user.getId(), user.getEmail(), user.getOrganization().getId(), user.getRole());
+    return new AuthResult(user.getId(), user.getEmail(), user.getOrganization().getId(), user.getRole(), token);
+    }
+}
