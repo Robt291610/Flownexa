@@ -33,19 +33,17 @@ public class JoinRequestController {
 
     @GetMapping
     @Operation(summary = "List pending join requests for the admin's organization")
-    public ResponseEntity<List<PendingUserResponse>> listPending(Authentication authentication) {
-        UUID adminId = currentUserId(authentication);
-        return ResponseEntity.ok(joinRequestService.listPending(adminId));
+    public ResponseEntity<List<PendingUserResponse>> listPending(@AuthenticationPrincipal AuthenticatedUser admin) {
+        return ResponseEntity.ok(joinRequestService.listPending(admin.getUserId()));
     }
 
     @PostMapping("/{userId}/decision")
     @Operation(summary = "Approve or reject a pending join request")
     public ResponseEntity<PendingUserResponse> decide(
-            Authentication authentication,
+            @AuthenticationPrincipal AuthenticatedUser admin,
             @PathVariable UUID userId,
             @Valid @RequestBody DecideJoinRequestRequest request) {
-        UUID adminId = currentUserId(authentication);
-        return ResponseEntity.ok(joinRequestService.decide(adminId, userId, request));
+        return ResponseEntity.ok(joinRequestService.decide(admin.getUserId(), userId, request));
     }
 
     private UUID currentUserId(Authentication authentication) {
