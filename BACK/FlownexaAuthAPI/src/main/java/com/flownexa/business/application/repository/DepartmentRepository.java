@@ -13,4 +13,6 @@ public interface DepartmentRepository extends JpaRepository<Department, UUID> {
     Optional<Department> findByIdAndOrganizationId(UUID id, UUID organizationId);
 
     Optional<Department> findByOrganizationIdAndNameIgnoreCase(UUID organizationId, String name);
+    
+    long countByOrganizationIdAndActiveTrue(UUID organizationId);
 }

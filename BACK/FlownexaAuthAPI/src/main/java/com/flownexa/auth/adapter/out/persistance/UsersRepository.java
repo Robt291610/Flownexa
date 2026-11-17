@@ -1,5 +1,6 @@
 package com.flownexa.auth.adapter.out.persistance;
 
+import com.flownexa.auth.domain.enums.Role;
 import com.flownexa.auth.domain.enums.UserStatus;
 import com.flownexa.auth.domain.model.Organization;
 import com.flownexa.auth.domain.model.Users;
@@ -14,4 +15,8 @@ public interface UsersRepository extends JpaRepository<Users, UUID> {
     List<Users> findByOrganizationAndStatus(Organization organization, UserStatus status);
     
     Optional<Users> findByEmail(String email);
+    
+    long countByOrganizationIdAndStatus(UUID organizationId, UserStatus status);
+    
+    long countByOrganizationIdAndRoleAndStatus(UUID organizationId, Role role, UserStatus status);
 }

@@ -118,7 +118,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         AuthenticatedUser principal = (AuthenticatedUser) authentication.getPrincipal();
-        return ResponseEntity.ok(new MeResponse(principal.getUserId(), principal.getEmail()));
+        return ResponseEntity.ok(new MeResponse(
+        principal.getUserId(), principal.getEmail(),
+        principal.getRole(), principal.getOrganizationId()));
     }
 
 }
